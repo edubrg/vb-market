@@ -1,0 +1,75 @@
+{
+  "root": true,
+  "plugins": ["import", "unused-imports"],
+  "settings": {
+    "import/resolver": {
+      "typescript": {
+        "project": [
+          "projects/shell/tsconfig.app.json",
+          "projects/mfe-products/tsconfig.app.json",
+          "projects/lib-contracts/tsconfig.lib.json"
+        ]
+      }
+    }
+  },
+  "ignorePatterns": ["node_modules", "dist"],
+  "overrides": [
+    {
+      "files": ["*.spec.ts"],
+      "extends": ["plugin:@angular-eslint/recommended"],
+      "rules": {}
+    },
+    {
+      "files": ["*.ts"],
+      "excludedFiles": ["*.spec.ts"],
+      "extends": [
+        "plugin:@angular-eslint/recommended",
+        "plugin:@angular-eslint/template/process-inline-templates"
+      ],
+      "rules": {
+        "@angular-eslint/no-empty-lifecycle-method": "warn",
+        "import/order": [
+          "error",
+          {
+            "groups": ["builtin", "external", "internal", ["parent", "sibling", "index"]],
+            "pathGroups": [
+              {
+                "pattern": "@angular/**",
+                "group": "external",
+                "position": "before"
+              },
+              {
+                "pattern": "lib-contracts",
+                "group": "internal",
+                "position": "after"
+              }
+            ],
+            "pathGroupsExcludedImportTypes": ["builtin"],
+            "newlines-between": "always",
+            "alphabetize": {
+              "order": "asc",
+              "caseInsensitive": true
+            }
+          }
+        ],
+        "unused-imports/no-unused-imports": "error",
+        "unused-imports/no-unused-vars": [
+          "warn",
+          {
+            "vars": "all",
+            "varsIgnorePattern": "^_",
+            "args": "after-used",
+            "argsIgnorePattern": "^_"
+          }
+        ]
+      }
+    },
+    {
+      "files": ["*.html"],
+      "extends": ["plugin:@angular-eslint/template/recommended"],
+      "rules": {
+        "@angular-eslint/template/prefer-self-closing-tags": "error"
+      }
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+<header>
+  <mat-toolbar color="secondary" class="app-header">
+    <img src="images/logo.png" alt="Logo" class="logo" />
+
+    <mat-form-field class="example-full-width" subscriptSizing="dynamic">
+      <mat-label>Selecione o cliente</mat-label>
+      <input #input type="text" matInput [formControl]="clientControl" [matAutocomplete]="auto" />
+      <mat-autocomplete
+        #auto="matAutocomplete"
+        [displayWith]="displayClient"
+        (optionSelected)="onClientSelected($event.option.value)"
+      >
+        @for (option of clientFilteredOptions; track option.id) {
+          <mat-option [value]="option">{{ option.name }}</mat-option>
+        }
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <nav class="nav">
+      <ul class="nav-list">
+        <li>
+          <a routerLink="/products" routerLinkActive="active">Products</a>
+        </li>
+        <li>
+          <a routerLink="/cart" routerLinkActive="active">Cart</a>
+        </li>
+      </ul>
+    </nav>
+  </mat-toolbar>
+</header>

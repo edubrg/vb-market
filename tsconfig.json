@@ -7,6 +7,10 @@
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
+    "paths": {
+      "lib-contracts": ["./projects/lib-contracts/src/public-api.ts"],
+      "vb-lib-ui": ["./dist/vb-lib-ui"]
+    },
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,

@@ -1,59 +1,112 @@
 # VbMarket
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.19.
+Monorepo Angular com arquitetura de microfrontends (Native Federation). Projeto de portfólio para demonstrar fundação arquitetural: Shell como host, MFEs remotos e bibliotecas compartilhadas.
 
-## Development server
+## Estrutura do projeto
 
-To start a local development server, run:
+| Projeto                 | Tipo    | Porta | Descrição                                   |
+| ----------------------- | ------- | ----- | --------------------------------------------- |
+| **shell**         | App     | 4200  | Host/orquestrador, navegação e contexto     |
+| **mfe-products**  | App     | 4201  | MFE de listagem de produtos                   |
+| **mfe-cart**      | App     | 4202  | MFE de carrinho                               |
+| **lib-contracts** | Library | -     | Tipos, interfaces e contratos (ex.: contexto) |
+| **vb-lib-ui**     | Library | -     | Componentes de UI reutilizáveis              |
 
-```bash
-ng serve
-```
+## Pré-requisitos
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- **Node.js** 20.19.1
+- **npm** 9+
+- Angular CLI: 19.2.19
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Instalação
 
 ```bash
-ng generate --help
+npm install
 ```
 
-## Building
+## Como rodar (desenvolvimento)
 
-To build the project run:
+O Shell consome as libs e os remotes. Para tudo funcionar, siga esta ordem:
+
+### 1. Build das bibliotecas (obrigatório antes do primeiro `serve`)
+
+O Shell e o mfe-products dependem de **vb-lib-ui**, que é resolvido a partir de `dist/`. É necessário gerar o build das libs uma vez:
+
+```bash
+npm run build lib-contracts
+npm run build vb-lib-ui
+```
+
+### 2. Subir Shell e remotes
+
+Abra **três terminais** na raiz do repositório.
+
+**Terminal 1 – Shell (host):**
+
+```bash
+ng serve shell
+```
+
+Acesse: **http://localhost:4200**
+
+**Terminal 2 – MFE Products:**
+
+```bash
+ng serve mfe-products
+```
+
+**Terminal 3 – MFE Cart:**
+
+```bash
+ng serve mfe-cart
+```
+
+Com os três em execução, a aplicação no navegador (localhost:4200) carrega o Shell e os microfrontends nas rotas `/products` e `/cart`.
+
+### Resumo rápido (já com dependências instaladas e libs buildadas)
+
+```bash
+# Terminal 1
+ng serve shell
+
+# Terminal 2
+ng serve mfe-products
+
+# Terminal 3
+ng serve mfe-cart
+```
+
+## Build para produção
+
+Build das libs e depois do Shell (os remotes são buildados conforme uso no seu fluxo de deploy):
+
+```bash
+ng build lib-contracts
+ng build vb-lib-ui
+ng build shell
+ng build mfe-products
+ng build mfe-cart
+```
+
+Ou apenas o Shell (se as libs já estiverem em `dist/`):
 
 ```bash
 ng build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## Testes e lint
 
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+*obs: Os testes serão desenvolvidos ao decorrer do projeto.*
 
 ```bash
-ng test
+# Testes (Karma) – executar por projeto, ex.:
+ng test shell
+
+# Lint em todo o monorepo
+npm run lint
 ```
 
-## Running end-to-end tests
+## Recursos adicionais
 
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- [Angular CLI](https://v19.angular.dev/overview)
+- [Native Federation (Angular Architects)](https://www.npmjs.com/package/@angular-architects/native-federation)
